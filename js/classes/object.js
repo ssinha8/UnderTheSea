@@ -8,9 +8,21 @@ class Object {
             this.y = y;
         }
 
-    draw() {
-        /**
-         * Overide, this is what is called to draw this object
-         */
+    /**
+     * Overide, this is what is called to draw this object
+     * @param canvas the p5 canvas object to draw on
+     * @Returns
+     */
+    draw(canvas) {
+        
     }
+
+    /**
+     * 
+     * overide, this is called every frame and does logic 
+     */
+    update() {
+        
+    }
+
 }
