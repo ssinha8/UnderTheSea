@@ -8,4 +8,6 @@
 function setup() {}
 
 // draw() function is called repeatedly, it's the main animation loop
-function draw() {}
+function draw() {
+    
+}
