@@ -26,4 +26,5 @@ function draw() {
   noStroke();
   fill("#065363");
   rect(0, 0, width, height);
+  drawBackground();
 }
