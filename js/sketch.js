@@ -14,6 +14,7 @@ function setup() {
 }
 
 function draw() {
+<<<<<<< HEAD
     background(173, 216, 230); // Light blue background
 
     // Draw sand layer
@@ -86,4 +87,12 @@ function generateSeed(){
       result += characters.charAt(Math.floor(Math.random() * characters.length));
   }
   return result;
+=======
+  randomSeed(seed);
+  background(100);
+  noStroke();
+  fill("#065363");
+  rect(0, 0, width, height);
+  drawBackground();
+>>>>>>> ad563f1 (Initial Sunlight Work (#3))
 }
