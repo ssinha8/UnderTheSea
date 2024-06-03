@@ -39,17 +39,6 @@ class Fish {
       this.size / 2
     );
 
-    // Fin
-    fill(100, 150, 250);
-    triangle(
-      0,
-      -this.size / 2,
-      -this.size / 2,
-      -this.size / 1.5,
-      this.size / 2,
-      -this.size / 1.5
-    );
-
     // Eye
     fill(255);
     ellipse(this.size / 2, -this.size / 4, this.size / 4, this.size / 4);
