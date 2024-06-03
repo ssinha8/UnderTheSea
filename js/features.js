@@ -9,16 +9,13 @@ function drawBackground() {
 }
 
 function lightRays() {
-    let shapeWidth = 50;
+  let shapeWidth = 50;
 
-    for (let i = 0; i < 50; i++) {
-        let movement = sin(millis()/1000);
-        
-        let x1 = random(-shapeWidth, width - shapeWidth) + movement;
-        let x2 = x1 + shapeWidth + movement;
-    
+  for (let i = 0; i < 50; i++) {
+    let movement = sin(millis());
 
-        let alpha = random(0.8, 0.95) + sin(second())/10
+    let x1 = random(-shapeWidth, width - shapeWidth) + movement;
+    let x2 = x1 + shapeWidth + movement;
 
         fill(random(250, 255), random(250, 255), 0, alpha * 255);
         
@@ -77,5 +74,13 @@ function drawSand() {
 
 function seaGrass(canvas) {
 
+function initializeFish() {
+  fishBucket = [];
+  let numFish = random(5, 20); // Number of fish based on seed
+  for (let i = 0; i < numFish; i++) {
+    let x = random(width);
+    let y = random(height);
+    let size = random(20, 50);
+    fishBucket.push(new Fish(x, y, size));
+  }
 }
-

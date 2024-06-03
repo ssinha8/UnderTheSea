@@ -2,9 +2,6 @@
 // Author: Your Name
 // Date:
 
-// Globals
-let seed = 239;
-
 // setup() function is called once when the program starts
 function setup() {
   // place our canvas, making it fit our container
@@ -13,10 +10,13 @@ function setup() {
   canvas.parent("canvas-container");
 
   $("#clicker").click(generate);
+
+  initializeFish();
 }
 
 function generate() {
   seed += 1;
+  initializeFish();
 }
 
 // draw() function is called repeatedly, it's the main animation loop
@@ -28,4 +28,8 @@ function draw() {
   fill("#065363");
   rect(0, 0, width, height);
   drawBackground();
+
+  for (let fish of fishBucket) {
+    fish.update();
+  }
 }
