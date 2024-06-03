@@ -5,14 +5,24 @@ class Fish {
     this.size = size;
     this.speed = random(1, 3);
     this.direction = random(TWO_PI);
+    this.targetDirection = this.direction;
     this.changeDirectionInterval = random(60, 180);
     this.timeSinceLastChange = 0;
     this.noiseOffset = random(1000); // Unique noise offset for each fish
+    this.flipped = false; // Track if the fish is flipped
   }
 
   draw() {
     push();
     translate(this.x, this.y);
+
+    // Apply rotation
+    rotate(this.direction);
+
+    // Apply horizontal flip if necessary
+    if (this.flipped) {
+      scale(1, -1);
+    }
 
     // Body
     fill(150, 100, 250);
@@ -27,6 +37,17 @@ class Fish {
       -this.size / 2,
       -this.size * 1.5,
       this.size / 2
+    );
+
+    // Fin
+    fill(100, 150, 250);
+    triangle(
+      0,
+      -this.size / 2,
+      -this.size / 2,
+      -this.size / 1.5,
+      this.size / 2,
+      -this.size / 1.5
     );
 
     // Eye
@@ -50,7 +71,11 @@ class Fish {
   }
 
   changeDirection() {
-    this.direction = noise(this.noiseOffset) * TWO_PI;
+    this.targetDirection = noise(this.noiseOffset) * TWO_PI;
+    this.targetDirection = atan2(
+      sin(this.targetDirection),
+      cos(this.targetDirection)
+    );
     this.noiseOffset += 0.1; // Increment noise offset for new values
   }
 
@@ -60,12 +85,33 @@ class Fish {
   }
 
   update() {
+    this.direction = atan2(sin(this.direction), cos(this.direction));
     this.timeSinceLastChange++;
     if (this.timeSinceLastChange >= this.changeDirectionInterval) {
       this.changeDirection();
       this.updateChangeInterval();
       this.timeSinceLastChange = 0;
     }
+
+    // Interpolate direction to target direction
+    let angleDifference = this.targetDirection - this.direction;
+    angleDifference = atan2(sin(angleDifference), cos(angleDifference)); // Normalize angle difference
+    this.direction += angleDifference * 0.05; // Adjust 0.05 for smoothness
+
+    // Check if the direction crosses the vertical axis
+    if (
+      (this.direction > HALF_PI || this.direction < -HALF_PI) &&
+      !this.flipped
+    ) {
+      this.flipped = true; // Flip the fish horizontally
+    } else if (
+      this.direction <= HALF_PI &&
+      this.direction >= -HALF_PI &&
+      this.flipped
+    ) {
+      this.flipped = false; // Unflip the fish horizontally
+    }
+
     this.move();
     this.draw();
   }
