@@ -4,9 +4,10 @@
 
 function drawBackground() {
     bgGradient();
-    drawSand();
     lightRays();
+    drawSand();
 }
+
 
 function lightRays() {
   let shapeWidth = 50;
@@ -16,9 +17,10 @@ function lightRays() {
 
     let x1 = random(-shapeWidth, width - shapeWidth) + movement;
     let x2 = x1 + shapeWidth + movement;
+    let alpha = random(0.8, 0.95) + sin(second()) / 10;
 
-        fill(random(250, 255), random(250, 255), 0, alpha * 255);
-        
+        fill(random(250, 255), random(250, 255), 0, alpha * 5);
+        noStroke()
         beginShape();
         
         vertex(x1 + shapeWidth, 0);
@@ -72,7 +74,7 @@ function drawSand() {
     }
 }
 
-function seaGrass(canvas) {
+function seaGrass(canvas) {}
 
 function initializeFish() {
   fishBucket = [];
