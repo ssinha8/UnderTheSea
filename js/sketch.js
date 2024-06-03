@@ -21,6 +21,7 @@ function generate() {
 
 // draw() function is called repeatedly, it's the main animation loop
 function draw() {
+  noiseSeed(seed);
   randomSeed(seed);
   background(100);
   noStroke();
