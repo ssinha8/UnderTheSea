@@ -73,7 +73,6 @@ function drawSand() {
   }
 }
 
-function seaGrass(canvas) {}
 
 function initializeFish() {
   fishBucket = [];
@@ -84,4 +83,10 @@ function initializeFish() {
     let size = random(20, 50);
     fishBucket.push(new Fish(x, y, size));
   }
+}
+
+function intializeKelp() {
+    for (let i = 0; i < 10; i++) {
+        seaLife.push(new Plant(i * width/10, height));
+    }
 }

@@ -16,6 +16,8 @@ function setup() {
     initializeFish();
     initializeSeaLife(seed);
     initializeTrash();
+  intializeKelp();
+  console.log(seaLife);
 }
 
 function generate() {
@@ -23,6 +25,7 @@ function generate() {
     initializeFish();
     initializeTrash();
     lastSpawnTime = millis(); 
+  initializeKelp();
 }
 
 function draw() {
@@ -68,4 +71,9 @@ function generateTrash() {
         trashParticles.push(newTrash);
         lastSpawnTime = millis();
     }
+
+  for (let life of seaLife) {
+    
+    life.draw();
+  }
 }
