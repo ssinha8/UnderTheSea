@@ -19,7 +19,7 @@ class Plant extends BaseObject {
 
     update() {
 
-        if (noise(this.x + + this.y + millis()) < 0.1) { 
+        if (noise(this.x + this.y + millis()) < 0.1) { 
             this.size++;
         }
     }
