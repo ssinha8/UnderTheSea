@@ -1,7 +1,7 @@
 class Plant extends BaseObject {
     constructor(x, y) {
         super(x, y);
-        this.size = 3;
+        this.size = 0;
         this.segmentLength = 100;
     }
 
