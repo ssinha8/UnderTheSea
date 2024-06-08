@@ -1,7 +1,6 @@
-class Fish {
+class Fish extends BaseObject {
   constructor(x, y, size) {
-    this.x = x;
-    this.y = y;
+    super(x, y)
     this.size = size;
     this.speed = random(1, 3);
     this.direction = random(TWO_PI);
@@ -102,6 +101,6 @@ class Fish {
     }
 
     this.move();
-    this.draw();
+    //this.draw();
   }
 }
