@@ -21,7 +21,6 @@ function setup() {
 function generate() {
     seed += 1;
     initializeFish();
-    initializeSeaLife(seed);
     initializeTrash();
     lastSpawnTime = millis(); 
 }
