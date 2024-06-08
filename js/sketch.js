@@ -14,10 +14,10 @@ function setup() {
     $("#clicker").click(generate);
 
     initializeFish();
-    initializeSeaLife(seed);
+    //initializeSeaLife(seed);
     initializeTrash();
-  intializeKelp();
-  console.log(seaLife);
+    intializeKelp();
+    console.log(seaLife);
 }
 
 function generate() {
@@ -25,7 +25,7 @@ function generate() {
     initializeFish();
     initializeTrash();
     lastSpawnTime = millis(); 
-  initializeKelp();
+    initializeKelp();
 }
 
 function draw() {
@@ -37,8 +37,14 @@ function draw() {
     rect(0, 0, width, height);
     drawBackground();
 
+    for (let life of seaLife) {
+        life.update();
+        life.draw();
+    }
+
     for (let fish of fishBucket) {
         fish.update();
+        fish.draw();
     }
 
     for (let trash of trashParticles) {
@@ -72,8 +78,5 @@ function generateTrash() {
         lastSpawnTime = millis();
     }
 
-  for (let life of seaLife) {
-    
-    life.draw();
-  }
+  
 }

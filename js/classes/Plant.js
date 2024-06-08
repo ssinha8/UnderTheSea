@@ -1,7 +1,7 @@
 class Plant extends BaseObject {
     constructor(x, y) {
         super(x, y);
-        this.size = 5;
+        this.size = 3;
         this.segmentLength = 100;
     }
 
@@ -9,11 +9,18 @@ class Plant extends BaseObject {
         fill("green");
         stroke("darkgreen");
 
-        let segmentY = this.y;
+        let segmentY = this.y + this.segmentLength/2;
         for (let i = 0; i < this.size; i++) {
             curve(this.x + this.segmentLength, segmentY, this.x, segmentY - this.segmentLength, this.x, segmentY, this.x - this.segmentLength, segmentY);
-            segmentY = segmentY + this.segmentLength;
+            segmentY = segmentY - this.segmentLength/2;
         }
         
+    }
+
+    update() {
+
+        if (noise(this.x + + this.y + millis()) < 0.1) { 
+            this.size++;
+        }
     }
 }

@@ -86,7 +86,10 @@ function initializeFish() {
 }
 
 function intializeKelp() {
+  let base = width/10;
     for (let i = 0; i < 10; i++) {
-        seaLife.push(new Plant(i * width/10, height));
+      let x = (i * base) + base/2;
+      x += random(-base/10, base/10);
+      seaLife.push(new Plant(x, height));
     }
 }
