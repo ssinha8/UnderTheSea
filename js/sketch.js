@@ -1,3 +1,7 @@
+// sketch.js - purpose and description here
+// Author: Your Name
+// Date:
+
 let trashParticles = [];
 let lastSpawnTime = 0;
 const spawnInterval = 10000;
