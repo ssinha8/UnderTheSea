@@ -12,13 +12,13 @@ function lightRays() {
   let shapeWidth = 50;
 
   for (let i = 0; i < 50; i++) {
-    let movement = sin(millis()/1000);
+    let movement = sin(millis());
 
     let x1 = random(-shapeWidth, width - shapeWidth) + movement;
     let x2 = x1 + shapeWidth + movement;
-    let alpha = constrain(sin(millis() / noise(x1)) + noise(x1), 0.6, 0.85);
+    let alpha = random(0.8, 0.95) + sin(second()) / 10;
 
-    fill(random(250, 255), random(250, 255), 0, alpha);
+    fill(random(250, 255), random(250, 255), 0, alpha * 5);
     noStroke();
     beginShape();
 
