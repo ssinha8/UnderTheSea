@@ -12,7 +12,7 @@ function lightRays() {
   let shapeWidth = 50;
 
   for (let i = 0; i < 50; i++) {
-    let movement = sin(millis()/1000);
+    let movement = 2 * sin(noise(i) + millis()/1000);
 
     let x1 = random(-shapeWidth, width - shapeWidth) + movement;
     let x2 = x1 + shapeWidth + movement;
