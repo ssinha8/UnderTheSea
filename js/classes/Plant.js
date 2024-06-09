@@ -11,7 +11,8 @@ class Plant extends BaseObject {
 
         let segmentY = this.y + this.segmentLength/2;
         for (let i = 0; i < this.size; i++) {
-            curve(this.x + this.segmentLength, segmentY, this.x, segmentY - this.segmentLength, this.x, segmentY, this.x - this.segmentLength, segmentY);
+            let segmentX = this.x + 3 * sin(noise(this.x) * millis()/1000);
+            curve(segmentX + this.segmentLength, segmentY, segmentX, segmentY - this.segmentLength, segmentX, segmentY, segmentX - this.segmentLength, segmentY);
             segmentY = segmentY - this.segmentLength/2;
         }
         
