@@ -2,7 +2,8 @@
 let seed = 239;
 
 // Fish Class vars
-let fishbucket = [];
+let fishBucket = [];
+let breedingPairs = [];
 
 let tailTypes = 3;
 let eyeTypes = 3;
