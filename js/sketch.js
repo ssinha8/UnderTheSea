@@ -82,9 +82,3 @@ function generateTrash() {
 
   
 }
-
-function addKelp(x, y) {
-  if (y > height - sandHeight) { // Check if y-coordinate is within the sand area
-    seaLife.push(new Plant(x, y));
-  }
-}
