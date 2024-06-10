@@ -86,3 +86,17 @@ function generateTrash() {
     lastSpawnTime = millis();
   }
 }
+
+// Mouse pressed function to remove fish
+function mousePressed() {
+    console.log(`Mouse clicked at (${mouseX}, ${mouseY})`);
+  
+    for (let i = fishBucket.length - 1; i >= 0; i--) {
+      if (fishBucket[i].contains(mouseX, mouseY)) {
+        console.log(`Fish at index ${i} clicked and removed`);
+        fishBucket.splice(i, 1);
+        break; // Stop checking after the first match
+      }
+    }
+  }
+  

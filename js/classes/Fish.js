@@ -389,6 +389,11 @@ class Fish extends BaseObject {
     //this.draw();
   }
 
+  contains(px, py) {
+    let d = dist(px, py, this.x, this.y);
+    return d < this.size / 2;
+  }
+  
   canBreed() {
     return this.age >= this.breedingAge;
   }

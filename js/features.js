@@ -35,9 +35,16 @@ function bgGradient() {
   let topColor = color(random(100, 200), random(150, 230), random(200, 255)); // Random light blue
   let bottomColor = color(0, 0, random(100, 150)); // Random dark blue
 
-  // Randomize the start and end positions of the gradient
-  let startY = random(0, height / 8);
-  let endY = random(height / 2, height);
+  // Adjust the oscillation parameters
+  let oscillationSpeed = 0.005; // Slower oscillation
+  let startAmplitude = height / 16; // Smaller amplitude for startY
+  let endAmplitude = height / 8; // Smaller amplitude for endY
+
+  let startYOffset = startAmplitude * sin(frameCount * oscillationSpeed);
+  let endYOffset = endAmplitude * sin(frameCount * oscillationSpeed + PI / 2);
+
+  let startY = height / 8 + startYOffset;
+  let endY = height / 2 + endYOffset;
 
   for (let y = 0; y <= height; y++) {
     let inter;
@@ -62,10 +69,11 @@ function drawSand() {
   // Sand color
   let sandColor = color(237, 201, 175);
 
-  // Draw sand
+  // Draw sand with vertical shifting effect
   for (let x = 0; x <= width; x++) {
-    // Perlin noise for smooth, natural variation
-    let noiseVal = noise(x * 0.01 + xOffset);
+    // Perlin noise for smooth, natural variation with time component for vertical movement
+    let time = millis() * 0.0001; // Adjust the speed of the up and down movement
+    let noiseVal = noise(x * 0.01 + xOffset, time);
     let y = map(noiseVal, 0, 1, baseY, height);
 
     stroke(sandColor);
