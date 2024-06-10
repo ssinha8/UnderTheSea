@@ -2,6 +2,7 @@ class Fish extends BaseObject {
   constructor(x, y, size) {
     // position and size vars
     super(x, y);
+    this.originalSize = size;
     this.size = size;
 
     // helper and random vars
@@ -320,18 +321,25 @@ class Fish extends BaseObject {
     }
 
     // Check if fish has reached max age
-    if (this.age >= this.maxLifespan) {
+    if (
+      this.age >= this.maxLifespan &&
+      this.targetX == null &&
+      this.targetY == null
+    ) {
       this.alive = false;
       this.kill();
     }
 
     // handle random direction changes
     this.direction = atan2(sin(this.direction), cos(this.direction));
-    this.timeSinceLastChange++;
-    if (this.timeSinceLastChange >= this.changeDirectionInterval) {
-      this.changeDirection();
-      this.updateChangeInterval();
-      this.timeSinceLastChange = 0;
+
+    if (this.targetX == null && this.targetY == null) {
+      this.timeSinceLastChange++;
+      if (this.timeSinceLastChange >= this.changeDirectionInterval) {
+        this.changeDirection();
+        this.updateChangeInterval();
+        this.timeSinceLastChange = 0;
+      }
     }
 
     // acts as sand boundary and resets fish to bounce off the bottom
@@ -347,8 +355,10 @@ class Fish extends BaseObject {
       let distance = sqrt(dx * dx + dy * dy);
       this.speed = 2; // Adjust speed as needed
       this.targetDirection = angle;
-      if (distance < 1) {
+      if (distance < 5) {
         this.speed = 0;
+        this.targetDirection = 0;
+        this.direction = this.targetDirection;
         if (this.stamina == null) {
           this.stamina = millis();
         }
