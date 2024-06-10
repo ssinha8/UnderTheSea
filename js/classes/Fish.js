@@ -34,7 +34,7 @@ class Fish extends BaseObject {
     this.stamina = null;
     this.funTimeOver = false;
     this.partner = null;
-    this.breedingAge = 2000; // Age at which the fish can breed
+    this.breedingAge = 40000; // Age at which the fish can breed
   }
 
   draw() {
