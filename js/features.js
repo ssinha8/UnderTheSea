@@ -75,7 +75,8 @@ function drawSand() {
 
 function initializeFish() {
   fishBucket = [];
-  let numFish = random(5, 20); // Number of fish based on seed
+  breedingFish = [];
+  let numFish = 2; //random(5, 20); // Number of fish based on seed
   for (let i = 0; i < numFish; i++) {
     let x = random(width);
     let y = random(height);
@@ -84,16 +85,59 @@ function initializeFish() {
   }
 }
 
-function killFish(fish) {
-  if (fish.alive == false) {
-    let index = fishBucket.indexOf(fish); // Find the index of the element
-    if (index != -1) {
-      fishBucket.splice(index, 1); // Remove the element from the list
+function breed(fish1, fish2) {
+  if (fish1.canBreed() && fish2.canBreed()) {
+    console.log("both fish can breed");
+    if (!fish1.hasBred && !fish2.hasBred) {
+      console.log("both fish should breed soon");
+      let targetX = (fish1.x + fish2.x) / 2;
+      let targetY = (fish1.y + fish2.y) / 2;
+      fish1.targetX = targetX;
+      fish1.targetY = targetY;
+      fish2.targetX = targetX;
+      fish2.targetY = targetY;
+
+      if (fish1.funTimeOver && fish2.funTimeOver) {
+        let newSize = (fish1.size + fish2.size) / 2;
+        let newFish = new Fish(targetX, targetY, newSize);
+
+        if (random() > 0.5) {
+          newFish.body = fish1.body;
+        } else {
+          newFish.body = fish2.body;
+        }
+        if (random() > 0.5) {
+          newFish.tail = fish1.tail;
+        } else {
+          newFish.tail = fish2.tail;
+        }
+        if (random() > 0.5) {
+          newFish.eye = fish1.eye;
+        } else {
+          newFish.eye = fish2.eye;
+        }
+
+        fish1.hasBred = true;
+        fish2.hasBred = true;
+        fish1.targetX = null;
+        fish1.targetY = null;
+        fish2.targetX = null;
+        fish2.targetY = null;
+
+        return newFish;
+      }
+    } else {
+      fish1.targetX = null;
+      fish1.targetY = null;
+      fish2.targetX = null;
+      fish2.targetY = null;
     }
   }
+  return null;
 }
 
 function intializeKelp() {
+  seaLife = [];
   let base = width / 10;
   for (let i = 0; i < 10; i++) {
     let x = i * base + base / 2;

@@ -18,6 +18,7 @@ function setup() {
   initializeTrash();
   intializeKelp();
   console.log(seaLife);
+  console.log(fishBucket);
 }
 
 function generate() {
@@ -42,10 +43,17 @@ function draw() {
     life.draw();
   }
 
-  for (let fish of fishBucket) {
+  for (let i = fishBucket.length - 1; i >= 0; i--) {
+    let fish = fishBucket[i];
     fish.update();
-    killFish(fish);
     fish.draw();
+    for (let j = i - 1; j >= 0; j--) {
+      let partner = fishBucket[j];
+      let newFish = breed(fish, partner);
+      if (newFish != null) {
+        fishBucket.push(newFish);
+      }
+    }
   }
 
   for (let trash of trashParticles) {

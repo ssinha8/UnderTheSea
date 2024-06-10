@@ -24,14 +24,17 @@ class Fish extends BaseObject {
     // life cycle vars
     this.alive = true;
     this.birthTime = millis();
-    this.age = random(40000);
+    this.age = 0;
     this.maxLifespan = random(60000, 120000);
 
     // breeding vars
-    this.breeding = false;
-    this.breedingAge = 40000; // Age at which the fish can breed
-    this.breedingCooldown = 20000; // Cooldown time before the fish can breed again
-    this.lastBred = this.birthTime; // Initialize last bred time to birth time
+    this.targetX = null;
+    this.targetY = null;
+    this.hasBred = false;
+    this.stamina = null;
+    this.funTimeOver = false;
+    this.partner = null;
+    this.breedingAge = 2000; // Age at which the fish can breed
   }
 
   draw() {
@@ -312,30 +315,45 @@ class Fish extends BaseObject {
     this.age = currentTime - this.birthTime;
 
     // Adjust size based on age
-    if (this.age < 40000) {
+    if (this.age < this.breedingAge) {
       this.size += 0.0000005 * this.age; // Adjust size based on age (adjust as needed)
     }
 
     // Check if fish has reached max age
-    if (this.age >= this.maxLifespan && this.breeding == false) {
+    if (this.age >= this.maxLifespan) {
       this.alive = false;
+      this.kill();
     }
 
+    // handle random direction changes
     this.direction = atan2(sin(this.direction), cos(this.direction));
-
     this.timeSinceLastChange++;
-    if (
-      this.timeSinceLastChange >= this.changeDirectionInterval &&
-      this.breeding == false
-    ) {
+    if (this.timeSinceLastChange >= this.changeDirectionInterval) {
       this.changeDirection();
       this.updateChangeInterval();
       this.timeSinceLastChange = 0;
     }
 
+    // acts as sand boundary and resets fish to bounce off the bottom
     if (this.y + this.size > height * 0.97) {
       this.targetDirection = noise(this.noiseOffset) * -PI;
       this.noiseOffset += 0.1;
+    }
+
+    if (this.targetX != null && this.targetY != null) {
+      let dx = this.targetX - this.x;
+      let dy = this.targetY - this.y;
+      let angle = atan2(dy, dx);
+      let distance = sqrt(dx * dx + dy * dy);
+      this.speed = 2; // Adjust speed as needed
+      this.targetDirection = angle;
+      if (distance < 1) {
+        this.speed = 0;
+        if (this.stamina == null) {
+          this.stamina = millis();
+        }
+        this.cornhub();
+      }
     }
 
     // Interpolate direction to target direction
@@ -359,5 +377,25 @@ class Fish extends BaseObject {
 
     this.move();
     //this.draw();
+  }
+
+  canBreed() {
+    return this.age >= this.breedingAge;
+  }
+
+  cornhub() {
+    let currentTime = millis();
+    if (currentTime - this.stamina > 10000) {
+      this.funTimeOver = true;
+    }
+  }
+
+  kill() {
+    if (this.alive == false) {
+      let index = fishBucket.indexOf(this); // Find the index of the element
+      if (index != -1) {
+        fishBucket.splice(index, 1); // Remove the element from the list
+      }
+    }
   }
 }
