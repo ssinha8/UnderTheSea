@@ -326,4 +326,9 @@ class Fish extends BaseObject {
     this.move();
     //this.draw();
   }
+
+  contains(px, py) {
+    let d = dist(px, py, this.x, this.y);
+    return d < this.size / 2;
+  }
 }

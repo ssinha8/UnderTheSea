@@ -53,7 +53,6 @@ function bgGradient() {
     line(0, y, width, y);
   }
 }
-
 function drawSand() {
   let duneHeight = height * random(0.01, 0.2); // Height of the dunes
   let baseY = height - duneHeight; // Starting Y position for the dunes
@@ -62,10 +61,11 @@ function drawSand() {
   // Sand color
   let sandColor = color(237, 201, 175);
 
-  // Draw sand
+  // Draw sand with vertical shifting effect
   for (let x = 0; x <= width; x++) {
-    // Perlin noise for smooth, natural variation
-    let noiseVal = noise(x * 0.01 + xOffset);
+    // Perlin noise for smooth, natural variation with time component for vertical movement
+    let time = millis() * 0.0001; // Adjust the speed of the up and down movement
+    let noiseVal = noise(x * 0.01 + xOffset, time);
     let y = map(noiseVal, 0, 1, baseY, height);
 
     stroke(sandColor);
