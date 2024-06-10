@@ -12,7 +12,7 @@ function lightRays() {
   let shapeWidth = 50;
 
   for (let i = 0; i < 50; i++) {
-    let movement = 2 * sin(noise(i) + millis()/1000);
+    let movement = 2 * sin(noise(i) + millis() / 1000);
 
     let x1 = random(-shapeWidth, width - shapeWidth) + movement;
     let x2 = x1 + shapeWidth + movement;
@@ -81,23 +81,81 @@ function drawSand() {
   }
 }
 
-
 function initializeFish() {
   fishBucket = [];
+  breedingFish = [];
   let numFish = random(5, 20); // Number of fish based on seed
   for (let i = 0; i < numFish; i++) {
     let x = random(width);
     let y = random(height);
-    let size = random(20, 50);
+    let size = random(30, 45);
     fishBucket.push(new Fish(x, y, size));
   }
 }
 
-function intializeKelp() {
-  let base = width/10;
-    for (let i = 0; i < 10; i++) {
-      let x = (i * base) + base/2;
-      x += random(-base/10, base/10);
-      seaLife.push(new Plant(x, height));
+function breed(fish1, fish2) {
+  if (fish1.canBreed() && fish2.canBreed()) {
+    if (fish1.partner == null && fish2.partner == null) {
+      fish1.partner = fish2;
+      fish2.partner = fish1;
     }
+    if (
+      !fish1.hasBred &&
+      !fish2.hasBred &&
+      fish1.partner == fish2 &&
+      fish2.partner == fish1 &&
+      random() < 0.3
+    ) {
+      let targetX = (fish1.x + fish2.x) / 2;
+      let targetY = (fish1.y + fish2.y) / 2;
+      fish1.targetX = targetX;
+      fish1.targetY = targetY;
+      fish2.targetX = targetX;
+      fish2.targetY = targetY;
+
+      if (fish1.funTimeOver && fish2.funTimeOver) {
+        let newSize = random(
+          min(fish1.originalSize, fish2.originalSize),
+          max(fish1.originalSize + fish2.originalSize)
+        );
+        let newFish = new Fish(targetX, targetY, newSize);
+
+        if (random() > 0.5) {
+          newFish.body = fish1.body;
+        } else {
+          newFish.body = fish2.body;
+        }
+        if (random() > 0.5) {
+          newFish.tail = fish1.tail;
+        } else {
+          newFish.tail = fish2.tail;
+        }
+        if (random() > 0.5) {
+          newFish.eye = fish1.eye;
+        } else {
+          newFish.eye = fish2.eye;
+        }
+
+        fish1.hasBred = true;
+        fish2.hasBred = true;
+        fish1.targetX = null;
+        fish1.targetY = null;
+        fish2.targetX = null;
+        fish2.targetY = null;
+
+        return newFish;
+      }
+    }
+  }
+  return null;
+}
+
+function intializeKelp() {
+  seaLife = [];
+  let base = width / 10;
+  for (let i = 0; i < 10; i++) {
+    let x = i * base + base / 2;
+    x += random(-base / 10, base / 10);
+    seaLife.push(new Plant(x, height));
+  }
 }
