@@ -116,7 +116,7 @@ function breed(fish1, fish2) {
       if (fish1.funTimeOver && fish2.funTimeOver) {
         let newSize = random(
           min(fish1.originalSize, fish2.originalSize),
-          max(fish1.originalSize + fish2.originalSize)
+          max(fish1.originalSize, fish2.originalSize)
         );
         let newFish = new Fish(targetX, targetY, newSize);
 
@@ -134,6 +134,16 @@ function breed(fish1, fish2) {
           newFish.eye = fish1.eye;
         } else {
           newFish.eye = fish2.eye;
+        }
+        if (random() > 0.5) {
+          newFish.bodyColor = fish1.bodyColor;
+        } else {
+          newFish.bodyColor = fish2.bodyColor;
+        }
+        if (random() > 0.5) {
+          newFish.tailColor = fish1.tailColor;
+        } else {
+          newFish.tailColor = fish2.tailColor;
         }
 
         fish1.hasBred = true;

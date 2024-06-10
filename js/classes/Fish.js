@@ -17,6 +17,12 @@ class Fish extends BaseObject {
     this.timeSinceLastChange = 0;
 
     // visual vars
+    let colors = tailColors.map((c) => color(c));
+    let curColor = random(colors);
+    this.tailColor = curColor;
+    colors = bodyColors.map((c) => color(c));
+    curColor = random(colors);
+    this.bodyColor = curColor;
     this.tail = floor(random(tailTypes));
     this.body = floor(random(bodyTypes));
     this.eye = floor(random(eyeTypes));
@@ -64,7 +70,7 @@ class Fish extends BaseObject {
   }
 
   drawTail() {
-    fill(100, 50, 200);
+    fill(this.tailColor);
     if (this.tail == 0) {
       // Simple Triangle tail
       triangle(
@@ -109,7 +115,7 @@ class Fish extends BaseObject {
   }
 
   drawBody() {
-    fill(150, 100, 250);
+    fill(this.bodyColor);
     if (this.body == 0) {
       // Basic Ellipse body
       ellipse(this.anchorX + this.size, 0, this.size * 2, this.size);
@@ -152,7 +158,6 @@ class Fish extends BaseObject {
       return { x: x, y: y };
     } else if (this.body == 2) {
       // Pufferfish Body with triangle spikes
-      fill(200, 150, 250);
       let innerRadius = this.size;
 
       // Draw the inner circle for the entire body
@@ -182,7 +187,6 @@ class Fish extends BaseObject {
         let yOuter = (innerRadius + spikeLength) * sin((angle1 + angle2) / 2);
 
         // Draw each spike as a triangle
-        fill(200, 150, 250);
         triangle(
           xInner1,
           yInner1, // First point on the circle's circumference
@@ -197,7 +201,6 @@ class Fish extends BaseObject {
       return { x: x, y: y };
     } else if (this.body == 3) {
       // Pufferfish body with circles as spikes
-      fill(200, 150, 250);
       let innerRadius = this.size;
 
       // Draw the inner circle for the entire body
@@ -223,7 +226,6 @@ class Fish extends BaseObject {
         let yCenter = innerRadius * 0.7 * sin(angle);
 
         // Draw each circle
-        fill(200, 150, 250);
         ellipse(xCenter, yCenter, circleRadius * 2, circleRadius * 2);
       }
       let x = this.anchorX + this.size * 1.5;
