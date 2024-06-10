@@ -1,101 +1,90 @@
-// sketch.js - purpose and description here
-// Author: Your Name
-// Date:
 
-// Define variables
-let yOffset = 0; // Initial offset for Perlin noise
-let canvasContainer; // Define canvasContainer variable
-let dragging = null; // To track what is being dragged
-let dragImage = null; // To track the image being dragged
+let trashParticles = [];
+let lastSpawnTime = 0;
+const spawnInterval = 10000;
 
 function setup() {
-  canvasContainer = $("#canvas-container");
-  let canvas = createCanvas(canvasContainer.width(), canvasContainer.height());
-  canvas.parent("canvas-container");
+    canvasContainer = $("#canvas-container");
+    let canvas = createCanvas(canvasContainer.width(), canvasContainer.height());
+    canvas.parent("canvas-container");
 
-  $("#clicker").click(generate);
+    $("#clicker").click(generate);
 
-  $("#drag-kelp").mousedown(() => startDrag('kelp'));
-  $("#drag-coral").mousedown(() => startDrag('coral'));
-
-  initializeFish();
-  initializeInventory(seed);
+    initializeFish();
+    //initializeSeaLife(seed);
+    initializeTrash();
+    //intializeKelp();
+    console.log(seaLife);
 }
 
 function generate() {
-  seed += 1;
-  initializeFish();
-  initializeInventory(seed);
+    seed += 1;
+    initializeFish();
+    initializeTrash();
+    lastSpawnTime = millis(); 
+    //initializeKelp();
 }
 
-// draw() function is called repeatedly, it's the main animation loop
 function draw() {
-  noiseSeed(seed);
-  randomSeed(seed);
-  background(100);
-  noStroke();
-  fill("#065363");
-  rect(0, 0, width, height);
-  drawBackground();
+    noiseSeed(seed);
+    randomSeed(seed);
+    background(100);
+    noStroke();
+    fill("#065363");
+    rect(0, 0, width, height);
+    drawBackground();
 
-  seaLife.forEach((entity, index) => {
-      if (entity.type === 'kelp') {
-          fill(0, 128, 0); // Green color
-          rect(entity.x, entity.y, 5, 50);
-      } else if (entity.type === 'coral') {
-          fill(255, 0, 0); // Red color
-          rect(entity.x, entity.y, 10, 10);
-      }
-  });
+    for (let life of seaLife) {
+        life.update();
+        life.draw();
+    }
 
-  if (dragImage) {
-      image(dragImage, mouseX - 25, mouseY - 25, 50, 50);
-  }
+    for (let fish of fishBucket) {
+        fish.update();
+        fish.draw();
+    }
 
-  for (let fish of fishBucket) {
-    fish.update();
-  }
+    for (let trash of trashParticles) {
+        trash.move();
+        trash.display();
+    }
 
+    trashParticles = trashParticles.filter(trash => !trash.isOffScreen());
+
+    generateTrash();
 }
 
 function mousePressed() {
-  if (dragging) {
-    if (mouseY > height - sandHeight) {
-      if (dragging === 'kelp' && inventory.kelp > 0) {
-        seaLife.push({ type: 'kelp', x: mouseX, y: mouseY - 50 });
-        inventory.kelp--;
-      } else if (dragging === 'coral' && inventory.coral > 0) {
-        seaLife.push({ type: 'coral', x: mouseX, y: mouseY - 10 });
-        inventory.coral--;
-      }
-      updateInventoryDisplay();
+    for (let i = trashParticles.length - 1; i >= 0; i--) {
+        if (trashParticles[i].isClicked(mouseX, mouseY)) {
+            trashParticles.splice(i, 1);
+            break;
+        }
     }
-    dragging = null;
-    dragImage = null;
+
+     // Check if the mouse click is within the sand layer
+    if (mouseY > height - sandHeight) {
+      seaLife.push(new Plant(mouseX, mouseY));
+    }
+}
+
+function initializeTrash() {
+    trashParticles = [];
+}
+
+
+function generateTrash() {
+    if (millis() - lastSpawnTime > spawnInterval) {
+        let newTrash = new Trash();
+        trashParticles.push(newTrash);
+        lastSpawnTime = millis();
+    }
+
+  
+}
+
+function addKelp(x, y) {
+  if (y > height - sandHeight) { // Check if y-coordinate is within the sand area
+    seaLife.push(new Plant(x, y));
   }
 }
-
-function startDrag(type, imgSrc){
-  dragging = type;
-  dragImage = loadImage(imgSrc);
-}
-
-const button = document.getElementById("clicker");
-
-button.addEventListener("click", () => {
-  generate();
-  console.log(`Environment reimagined with new seed.`);
-});
-
-function generateSeed(){
-  // Generate a random string as a new seed (you can use any method you prefer)
-  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  let result = '';
-  for (let i = 0; i < 10; i++) {
-      result += characters.charAt(Math.floor(Math.random() * characters.length));
-  }
-  return result;
-}
-
-
-

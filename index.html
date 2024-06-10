@@ -4,6 +4,7 @@
     <title>Under The Sea</title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" type="text/css" href="../css/site.css" />
     <link rel="stylesheet" type="text/css" href="css/style.css" />
 
     <!-- Load jQuery library -->
@@ -15,31 +16,23 @@
     <!-- Load p5.js library -->
     <script src="https://cdn.jsdelivr.net/npm/p5@1.9.2/lib/p5.js"></script>
 
-    <script type="text/javascript" src="js/constants.js" defer></script>
-    <script type="text/javascript" src="js/engine.js" defer></script>
-    <script type="text/javascript" src="js/features.js" defer></script>
-    <script type="text/javascript" src="js/classes/Fish.js" defer></script>
-    <script type="text/javascript" src="js/sketch.js" defer></script>
-</head>
-<body>
+    <script type="text/javascript" src="./js/constants.js" defer></script>
+    <script type="text/javascript" src="./js/engine.js" defer></script>
+    <script type="text/javascript" src="./js/features.js" defer></script>
+    <script type="text/javascript" src="./js/classes/object.js" defer></script>
+    <script type="text/javascript" src="./js/classes/Plant.js" defer></script>
+    <script type="text/javascript" src="./js/classes/Fish.js" defer></script>
+    <script type="text/javascript" src="./js/classes/Trash.js" defer></script>
+    <script type="text/javascript" src="./js/sketch.js" defer></script>
+  </head>
+  <body>
     <div class="minor-section">
-        <div id="canvas-container">
-            <!-- canvas will be added here -->
-        </div>
-        <div class="text-box">
-            <button id="clicker">reimagine</button>
-        </div>
-    </div>
-    <div id="inventory">
-        <h2>Inventory</h2>
-        <div id="kelp-container" class="item-container">
-            <img src="img/kelp.png" id="drag-kelp" class="draggable" />
-            <span id="kelp-count">0</span>
-        </div>
-        <div id="coral-container" class="item-container">
-            <img src="img/coral.png" id="drag-coral" class="draggable" />
-            <span id="coral-count">0</span>
-        </div>
+      <div id="canvas-container">
+        <!-- canvas will be added here -->
+      </div>
+      <div class="text-box">
+        <button id="clicker">reimagine</button>
+      </div>
     </div>
 </body>
 </html>

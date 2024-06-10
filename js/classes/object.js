@@ -2,7 +2,7 @@
  * Base class for interactable objects
  */
 
-class Object {
+class BaseObject {
     constructor(x, y) {
             this.x = x
             this.y = y;
@@ -13,7 +13,7 @@ class Object {
      * @param canvas the p5 canvas object to draw on
      * @Returns
      */
-    draw(canvas) {
+    draw() {
         
     }
 

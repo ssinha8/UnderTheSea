@@ -2,12 +2,8 @@
 
 let seaLife = [];
 const sandHeight = 100;
-let inventory = {
-  kelp: 0,
-  coral: 0
-};
-const maxKelp = 10;
-const maxCoral = 5;
+let kelpPositions = []; // Array to store kelp positions
+
 
 // Function to generate initial world values
 function seedGetter(seed) {
@@ -23,26 +19,18 @@ function initializeSeaLife(seed) {
   seaLife = [];
   for (let i = 0; i < 10; i++) {
     seaLife.push({
-      type: i % 2 === 0 ? 'kelp' : 'coral',
+      type: i % 2 === 0 ? 'coral' : 'fish',
       x: Math.random() * width,
       y: Math.random() * (height - sandHeight)
     });
   }
 }
 
-// Initialize inventory
-function initializeInventory(seed) {
-  // Create a pseudo-random generator based on the seed
-  let kelpCount = seed % (maxKelp + 1);
-  let coralCount = (Math.floor(seed / 10) % (maxCoral + 1));
-
-  inventory.kelp = kelpCount;
-  inventory.coral = coralCount;
-  updateInventoryDisplay();
+function addKelp(x, y) {
+  if (y > height - sandHeight) { // Check if y-coordinate is within the sand area
+    seaLife.push(new Plant(x, y));
+  }
 }
 
-// Update the inventory display
-function updateInventoryDisplay() {
-  $("#kelp-count").text(inventory.kelp);
-  $("#coral-count").text(inventory.coral);
-}
+
+
