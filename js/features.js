@@ -76,7 +76,7 @@ function drawSand() {
 function initializeFish() {
   fishBucket = [];
   breedingFish = [];
-  let numFish = 2; //random(5, 20); // Number of fish based on seed
+  let numFish = random(5, 20); // Number of fish based on seed
   for (let i = 0; i < numFish; i++) {
     let x = random(width);
     let y = random(height);
