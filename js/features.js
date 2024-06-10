@@ -12,7 +12,7 @@ function lightRays() {
   let shapeWidth = 50;
 
   for (let i = 0; i < 50; i++) {
-    let movement = 2 * sin(noise(i) + millis()/1000);
+    let movement = 2 * sin(noise(i) + millis() / 1000);
 
     let x1 = random(-shapeWidth, width - shapeWidth) + movement;
     let x2 = x1 + shapeWidth + movement;
@@ -73,23 +73,31 @@ function drawSand() {
   }
 }
 
-
 function initializeFish() {
   fishBucket = [];
   let numFish = random(5, 20); // Number of fish based on seed
   for (let i = 0; i < numFish; i++) {
     let x = random(width);
     let y = random(height);
-    let size = random(20, 50);
+    let size = random(30, 45);
     fishBucket.push(new Fish(x, y, size));
   }
 }
 
-function intializeKelp() {
-  let base = width/10;
-    for (let i = 0; i < 10; i++) {
-      let x = (i * base) + base/2;
-      x += random(-base/10, base/10);
-      seaLife.push(new Plant(x, height));
+function killFish(fish) {
+  if (fish.alive == false) {
+    let index = fishBucket.indexOf(fish); // Find the index of the element
+    if (index != -1) {
+      fishBucket.splice(index, 1); // Remove the element from the list
     }
+  }
+}
+
+function intializeKelp() {
+  let base = width / 10;
+  for (let i = 0; i < 10; i++) {
+    let x = i * base + base / 2;
+    x += random(-base / 10, base / 10);
+    seaLife.push(new Plant(x, height));
+  }
 }

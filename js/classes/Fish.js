@@ -1,22 +1,37 @@
 class Fish extends BaseObject {
   constructor(x, y, size) {
-    super(x, y)
+    // position and size vars
+    super(x, y);
     this.size = size;
+
+    // helper and random vars
+    this.noiseOffset = random(1000); // Unique noise offset for each fish
+    this.flipped = false; // Track if the fish is flipped
+
+    // movement vars
     this.speed = random(1, 3);
     this.direction = random(TWO_PI);
     this.targetDirection = this.direction;
     this.changeDirectionInterval = random(60, 180);
     this.timeSinceLastChange = 0;
-    this.noiseOffset = random(1000); // Unique noise offset for each fish
-    this.flipped = false; // Track if the fish is flipped
 
-    // Randomly choose a drawing style for each body part
+    // visual vars
     this.tail = floor(random(tailTypes));
     this.body = floor(random(bodyTypes));
     this.eye = floor(random(eyeTypes));
-
-    // Define anchor point
     this.anchorX = -this.size; // All bodies and tails will connect at this x position
+
+    // life cycle vars
+    this.alive = true;
+    this.birthTime = millis();
+    this.age = random(40000);
+    this.maxLifespan = random(60000, 120000);
+
+    // breeding vars
+    this.breeding = false;
+    this.breedingAge = 40000; // Age at which the fish can breed
+    this.breedingCooldown = 20000; // Cooldown time before the fish can breed again
+    this.lastBred = this.birthTime; // Initialize last bred time to birth time
   }
 
   draw() {
@@ -47,7 +62,7 @@ class Fish extends BaseObject {
   drawTail() {
     fill(100, 50, 200);
     if (this.tail == 0) {
-      // Triangle tail
+      // Simple Triangle tail
       triangle(
         this.anchorX,
         0,
@@ -57,7 +72,7 @@ class Fish extends BaseObject {
         this.size / 2
       );
     } else if (this.tail == 1) {
-      // Another tail type
+      // Boomerang-like Tail
       beginShape();
       vertex(this.anchorX, 0);
       vertex(this.anchorX - this.size * 0.5, -this.size * 0.6);
@@ -65,9 +80,10 @@ class Fish extends BaseObject {
       vertex(this.anchorX - this.size * 0.5, this.size * 0.6);
       endShape(CLOSE);
     } else if (this.tail == 2) {
-      let tailLength = this.size; // Length of the tail
+      // Heart-like Tail
+      let tailLength = this.size;
       beginShape();
-      vertex(this.anchorX, 0); // Tail anchor
+      vertex(this.anchorX, 0);
       bezierVertex(
         this.anchorX - tailLength / 2,
         -this.size / 2,
@@ -91,13 +107,13 @@ class Fish extends BaseObject {
   drawBody() {
     fill(150, 100, 250);
     if (this.body == 0) {
-      // Ellipse body
+      // Basic Ellipse body
       ellipse(this.anchorX + this.size, 0, this.size * 2, this.size);
       let x = this.anchorX + this.size * 1.5;
       let y = -this.size / 4;
       return { x: x, y: y };
     } else if (this.body == 1) {
-      // Sideways arc body
+      // Curved body similar to one of an angelfish
       let arcWidth = this.size * 1.5; // Longer body
       let arcHeight = this.size; // Maintain height
       let offsetX = this.anchorX - arcWidth / 6;
@@ -131,17 +147,17 @@ class Fish extends BaseObject {
       let y = -this.size / 6;
       return { x: x, y: y };
     } else if (this.body == 2) {
-      // Pufferfish body with spikes only in the front part
+      // Pufferfish Body with triangle spikes
       fill(200, 150, 250);
       let innerRadius = this.size;
 
       // Draw the inner circle for the entire body
       ellipse(this.anchorX + innerRadius, 0, innerRadius * 2, innerRadius * 2);
 
-      // Draw spikes only between 45 degrees and -45 degrees
+      // Draw spikes only between two angles
       let startAngle = (-2 * PI) / 3;
       let endAngle = (2 * PI) / 3;
-      let spikeCount = 12; // Number of spikes in the specified angle range
+      let spikeCount = 12;
 
       for (let i = 0; i < spikeCount; i++) {
         let angle1 = lerp(startAngle, endAngle, i / spikeCount);
@@ -176,7 +192,7 @@ class Fish extends BaseObject {
       let y = -this.size / 4;
       return { x: x, y: y };
     } else if (this.body == 3) {
-      // Pufferfish body with spikes only in the front part
+      // Pufferfish body with circles as spikes
       fill(200, 150, 250);
       let innerRadius = this.size;
 
@@ -188,10 +204,10 @@ class Fish extends BaseObject {
         innerRadius * 1.5
       );
 
-      // Draw spikes only between 45 degrees and -45 degrees
+      // Draw spikes only between two angles
       let startAngle = (-5 * PI) / 6;
       let endAngle = (5 * PI) / 6;
-      let circleCount = 12; // Number of spikes in the specified angle range
+      let circleCount = 12;
 
       for (let i = 1; i < circleCount; i++) {
         let angle = lerp(startAngle, endAngle, i / circleCount);
@@ -254,12 +270,12 @@ class Fish extends BaseObject {
       fill(0);
       ellipse(x, y, this.size / 8, this.size / 8);
     } else if (this.eye == 1) {
-      // Another eye type
+      // Eye shifted forward
       ellipse(x, y, this.size / 4, this.size / 4);
       fill(0);
       ellipse(x + this.size / 16, y, this.size / 8, this.size / 8);
     } else if (this.eye == 2) {
-      // Crazy eye type
+      // Black eye
       fill(30);
       ellipse(x, y, this.size / 4, this.size / 4);
     }
@@ -281,6 +297,7 @@ class Fish extends BaseObject {
 
   changeDirection() {
     this.targetDirection = noise(this.noiseOffset) * TWO_PI;
+    this.speed = noise(this.noiseOffset) * 2 + 1;
     this.noiseOffset += 0.1; // Increment noise offset for new values
   }
 
@@ -290,10 +307,27 @@ class Fish extends BaseObject {
   }
 
   update() {
+    // Calculate the age of the fish
+    let currentTime = millis();
+    this.age = currentTime - this.birthTime;
+
+    // Adjust size based on age
+    if (this.age < 40000) {
+      this.size += 0.0000005 * this.age; // Adjust size based on age (adjust as needed)
+    }
+
+    // Check if fish has reached max age
+    if (this.age >= this.maxLifespan && this.breeding == false) {
+      this.alive = false;
+    }
+
     this.direction = atan2(sin(this.direction), cos(this.direction));
 
     this.timeSinceLastChange++;
-    if (this.timeSinceLastChange >= this.changeDirectionInterval) {
+    if (
+      this.timeSinceLastChange >= this.changeDirectionInterval &&
+      this.breeding == false
+    ) {
       this.changeDirection();
       this.updateChangeInterval();
       this.timeSinceLastChange = 0;
