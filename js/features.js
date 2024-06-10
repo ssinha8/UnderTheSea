@@ -35,9 +35,16 @@ function bgGradient() {
   let topColor = color(random(100, 200), random(150, 230), random(200, 255)); // Random light blue
   let bottomColor = color(0, 0, random(100, 150)); // Random dark blue
 
-  // Randomize the start and end positions of the gradient
-  let startY = random(0, height / 8);
-  let endY = random(height / 2, height);
+  // Adjust the oscillation parameters
+  let oscillationSpeed = 0.005; // Slower oscillation
+  let startAmplitude = height / 16; // Smaller amplitude for startY
+  let endAmplitude = height / 8; // Smaller amplitude for endY
+
+  let startYOffset = startAmplitude * sin(frameCount * oscillationSpeed);
+  let endYOffset = endAmplitude * sin(frameCount * oscillationSpeed + PI / 2);
+
+  let startY = height / 8 + startYOffset;
+  let endY = height / 2 + endYOffset;
 
   for (let y = 0; y <= height; y++) {
     let inter;
@@ -53,6 +60,7 @@ function bgGradient() {
     line(0, y, width, y);
   }
 }
+
 function drawSand() {
   let duneHeight = height * random(0.01, 0.2); // Height of the dunes
   let baseY = height - duneHeight; // Starting Y position for the dunes
